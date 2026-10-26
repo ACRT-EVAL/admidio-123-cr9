@@ -38,21 +38,21 @@ catch(AdmException $e)
     // => EXIT
 }
 
-// kompletten Pfad der Datei holen
+// get complete path with filename of the file
 $completePath = $file->getFullFilePath();
 
-// pruefen ob File ueberhaupt physikalisch existiert
+// check if the file already exists
 if (!is_file($completePath))
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
     // => EXIT
 }
 
-// Downloadcounter inkrementieren
+// Increment download counter
 $file->setValue('fil_counter', (int) $file->getValue('fil_counter') + 1);
 $file->save();
 
-// Dateigroese ermitteln
+// determine filesize
 $fileSize = filesize($completePath);
 $filename = FileSystemUtils::getSanitizedPathEntry($file->getValue('fil_name'));
 
@@ -65,8 +65,7 @@ else
     $content = 'attachment';
 }
 
-// Passenden Datentyp erzeugen.
-//header('Content-Type: application/octet-stream');
+// Create appropriate header information of the file
 header('Content-Type: ' . $file->getMimeType());
 header('Content-Length: ' . $fileSize);
 header('Content-Disposition: ' . $content . '; filename="' . $filename . '"');
